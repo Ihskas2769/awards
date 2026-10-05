@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Award Goes To</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 18px 56px;
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    color: #fff;
+    background:
+      radial-gradient(1000px 600px at 50% -10%, rgba(120,70,220,.55), transparent 65%),
+      radial-gradient(700px 500px at 15% 100%, rgba(225,29,72,.18), transparent 70%),
+      radial-gradient(700px 500px at 85% 100%, rgba(255,190,60,.14), transparent 70%),
+      linear-gradient(180deg, #170d33 0%, #0b0620 55%, #05030f 100%);
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+
+  .stage {
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* ---------- TROPHY ---------- */
+  .trophy-wrap {
+    width: 138px;
+    opacity: 0;
+    animation: trophyDrop .95s cubic-bezier(.2,.9,.3,1.45) .15s both;
+  }
+
+  @keyframes trophyDrop {
+    0%   { opacity: 0; transform: translateY(-170px) scale(.55) rotate(-14deg); }
+    55%  { opacity: 1; transform: translateY(12px) scale(1.06) rotate(4deg); }
+    75%  { transform: translateY(-6px) scale(.98) rotate(-2deg); }
+    100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+  }
+
+  .trophy-float {
+    position: relative;
+    width: 100%;
+    animation: floatY 4.2s ease-in-out 1.25s infinite;
+  }
+
+  @keyframes floatY {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-10px); }
+  }
+
+  .trophy {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 16px rgba(255,200,60,.55))
+            drop-shadow(0 16px 20px rgba(0,0,0,.55));
+  }
+
+  .trophy-glow {
+    position: absolute;
+    inset: -35% -30%;
+    z-index: 0;
+    background: radial-gradient(circle at 50% 45%,
+                rgba(255,205,80,.55), rgba(255,205,80,.12) 45%, transparent 72%);
+    filter: blur(14px);
+    animation: glowPulse 3.2s ease-in-out 1.3s infinite;
+  }
+
+  @keyframes glowPulse {
+    0%,100% { opacity: .65; transform: scale(.95); }
+    50%     { opacity: 1;   transform: scale(1.08); }
+  }
+
+  .sparkle {
+    position: absolute;
+    z-index: 2;
+    width: 16px; height: 16px;
+    background: linear-gradient(180deg,#fffbe6,#ffd75e);
+    clip-path: polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);
+    opacity: 0;
+    animation: sparklePop 2.2s ease-in-out infinite;
+  }
+  .sparkle.s1 { top: 4%;  left: -20px;  animation-delay: 1.4s; }
+  .sparkle.s2 { top: 34%; right: -22px; animation-delay: 2.1s; }
+  .sparkle.s3 { bottom: 14%; left: -12px; animation-delay: 2.7s; }
+
+  @keyframes sparklePop {
+    0%,100% { opacity: 0; transform: scale(.25) rotate(0deg); }
+    50%     { opacity: 1; transform: scale(1) rotate(90deg); }
+  }
+
+  /* ---------- RIBBON ---------- */
+  .ribbon-wrap {
+    height: 56px;
+    display: grid;
+    place-items: center;
+    margin-top: 10px;
+  }
+
+  .ribbon {
+    filter: drop-shadow(0 9px 20px rgba(225,29,72,.45));
+    animation: ribbonUnfurl .85s cubic-bezier(.2,.8,.3,1.35) .95s both;
+  }
+
+  @keyframes ribbonUnfurl {
+    0%   { opacity: 0; transform: scaleX(.02) scaleY(.6); }
+    60%  { opacity: 1; transform: scaleX(1.07) scaleY(1.04); }
+    100% { opacity: 1; transform: scaleX(1) scaleY(1); }
+  }
+
+  .ribbon-body {
+    display: block;
+    padding: 11px 48px;
+    font-size: .92rem;
+    font-weight: 800;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,.35);
+    background: linear-gradient(180deg,#ff6b8b 0%,#e11d48 45%,#9f0f30 100%);
+    clip-path: polygon(0 50%,22px 0,calc(100% - 22px) 0,100% 50%,calc(100% - 22px) 100%,22px 100%);
+  }
+
+  /* ---------- TITLE ---------- */
+  .title {
+    margin-top: 6px;
+    font-size: clamp(1.7rem, 6.4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    animation: titleIn .85s cubic-bezier(.2,.8,.3,1.1) 1.25s both;
+  }
+
+  .title span {
+    background: linear-gradient(180deg,#fffbe6 0%,#ffe08a 35%,#ffc93c 58%,#e0a800 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 24px rgba(255,190,60,.45));
+  }
+
+  @keyframes titleIn {
+    0%   { opacity: 0; transform: translateY(26px) scale(.94); letter-spacing: 9px; }
+    100% { opacity: 1; transform: translateY(0) scale(1); letter-spacing: .4px; }
+  }
+
+  /* ---------- PHOTO FRAME ---------- */
+  .photo-frame {
+    width: min(320px, 74vw);
+    aspect-ratio: 1 / 1;
+    margin-top: 24px;
+    padding: 7px;
+    border-radius: 26px;
+    background: linear-gradient(135deg,#fff6c2 0%,#ffd75e 20%,#b87b00 45%,#ffd75e 70%,#fff6c2 100%);
+    box-shadow: 0 0 0 1px rgba(255,230,150,.35),
+                0 22px 60px rgba(0,0,0,.6),
+                0 0 70px rgba(255,190,60,.22);
+    animation: framePop .9s cubic-bezier(.2,.9,.3,1.35) 1.55s both;
+  }
+
+  @keyframes framePop {
+    0%   { opacity: 0; transform: scale(.6) translateY(34px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .frame-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 40%, #1c1140, #0a0518 75%);
+  }
+
+  .frame-inner img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transform: scale(1.09);
+    animation: photoReveal .9s cubic-bezier(.2,.8,.3,1.2) 1.95s forwards;
+  }
+
+  @keyframes photoReveal {
+    0%   { opacity: 0; transform: scale(1.09); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* ---------- REPLAY BUTTON ---------- */
+  .actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+    animation: fadeUp .6s ease 2.35s both;
+  }
+
+  @keyframes fadeUp {
+    0%   { opacity: 0; transform: translateY(18px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 24px;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: .94rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: rgba(255,255,255,.07);
+    color: #d9d2ff;
+    transition: transform .18s ease, background .18s ease;
+  }
+
+  .btn:hover {
+    background: rgba(255,255,255,.14);
+    transform: translateY(-2px);
+  }
+
+  .btn:active { transform: scale(.96); }
+
+  .btn svg {
+    width: 17px; height: 17px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ---------- CONFETTI ---------- */
+  .confetti-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .confetti {
+    position: absolute;
+    top: -40px;
+    display: block;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    0%   { transform: translate3d(0,-40px,0) rotate(0deg); opacity: 0; }
+    8%   { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { transform: translate3d(var(--drift),106vh,0) rotate(var(--spin)); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+
+<main class="stage">
+
+  <!-- TROPHY -->
+  <div class="trophy-wrap">
+    <div class="trophy-float">
+      <div class="trophy-glow" aria-hidden="true"></div>
+      <span class="sparkle s1" aria-hidden="true"></span>
+      <span class="sparkle s2" aria-hidden="true"></span>
+      <span class="sparkle s3" aria-hidden="true"></span>
+
+      <svg class="trophy" viewBox="0 0 200 260" role="img" aria-label="Trophy">
+        <defs>
+          <linearGradient id="gold" x1="0" y1="0" x2="0.9" y2="1">
+            <stop offset="0%" stop-color="#fff7cf"/>
+            <stop offset="30%" stop-color="#ffd75e"/>
+            <stop offset="55%" stop-color="#e8b100"/>
+            <stop offset="78%" stop-color="#b57e00"/>
+            <stop offset="100%" stop-color="#ffd75e"/>
+          </linearGradient>
+          <linearGradient id="goldDark" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e8b100"/>
+            <stop offset="100%" stop-color="#8a5a00"/>
+          </linearGradient>
+        </defs>
+
+        <path d="M52 56 H36 C16 56 8 76 17 95 C26 114 40 124 56 126"
+              fill="none" stroke="url(#gold)" stroke-width="13" stroke-linecap="round"/>
+        <path d="M148 56 H164 C184 56 192 76 183 95 C174 114 160 124 144 126"
+              fill="none" stroke="url(#gold)" stroke-width="13" stroke-linecap="round"/>
+
+        <path d="M46 34 H154 V88 C154 132 131 160 100 160 C69 160 46 132 46 88 Z" fill="url(#gold)"/>
+        <rect x="38" y="22" width="124" height="20" rx="10" fill="url(#gold)"/>
+        <path d="M90 158 H110 V200 H90 Z" fill="url(#goldDark)"/>
+        <rect x="60" y="198" width="80" height="18" rx="9" fill="url(#gold)"/>
+        <rect x="44" y="216" width="112" height="22" rx="11" fill="url(#gold)"/>
+
+        <path d="M100 62 L108.5 79 L127 81.5 L113.5 94.5 L117 113
+                 L100 104 L83 113 L86.5 94.5 L73 81.5 L91.5 79 Z"
+              fill="#8a5a00" opacity=".55"/>
+
+        <path d="M66 52 C66 92 72 122 86 142"
+              stroke="#fffdf0" stroke-width="7" fill="none"
+              stroke-linecap="round" opacity=".5"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- RIBBON -->
+  <div class="ribbon-wrap">
+    <div class="ribbon">
+      <span class="ribbon-body">Winner</span>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <h1 class="title"><span>The Award Goes To</span></h1>
+
+  <!-- ============================================
+       YOUR PHOTO GOES HERE
+       Change "my-photo.jpg" to your image file name
+       (must be in the SAME folder as this HTML file)
+       ============================================ -->
+  <div class="photo-frame">
+    <div class="frame-inner">
+      <img id="preview" src="sujata.jpg" alt="Award Winner" />
+    </div>
+  </div>
+
+  <!-- REPLAY BUTTON -->
+  <div class="actions">
+    <button class="btn" id="replayBtn" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>
+      </svg>
+      Replay Animation
+    </button>
+  </div>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var replayBtn     = document.getElementById("replayBtn");
+  var confettiLayer = document.getElementById("confettiLayer");
+  var preview       = document.getElementById("preview");
+
+  var COLORS = ["#ffd75e","#ff6b8b","#7ad7ff","#b98cff","#7dffb0","#ffffff","#ffb347"];
+
+  function confetti(count) {
+    count = count || 60;
+    var frag = document.createDocumentFragment();
+
+    for (var i = 0; i < count; i++) {
+      var piece = document.createElement("i");
+      piece.className = "confetti";
+
+      var w = 6 + Math.random() * 7;
+
+      piece.style.left              = (Math.random() * 100).toFixed(2) + "vw";
+      piece.style.width             = w.toFixed(1) + "px";
+      piece.style.height            = (w * (1.2 + Math.random())).toFixed(1) + "px";
+      piece.style.background        = COLORS[(Math.random() * COLORS.length) | 0];
+      piece.style.animationDelay    = (Math.random() * 0.7).toFixed(2) + "s";
+      piece.style.animationDuration = (2.6 + Math.random() * 2.4).toFixed(2) + "s";
+      piece.style.setProperty("--drift", (Math.random() * 220 - 110).toFixed(0) + "px");
+      piece.style.setProperty("--spin",  (Math.random() * 900 - 450).toFixed(0) + "deg");
+
+      piece.addEventListener("animationend", function () {
+        if (this.parentNode) this.parentNode.removeChild(this);
+      });
+
+      frag.appendChild(piece);
+    }
+
+    confettiLayer.appendChild(frag);
+  }
+
+  function replay() {
+    var nodes = document.querySelectorAll(".stage *");
+
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      if (window.getComputedStyle(el).animationName !== "none") {
+        el.style.animation = "none";
+        void el.offsetWidth;
+        el.style.animation = "";
+      }
+    }
+
+    confetti(70);
+  }
+
+  replayBtn.addEventListener("click", replay);
+
+  window.addEventListener("load", function () {
+    confetti(70);
+    window.setTimeout(function () { confetti(40); }, 1400);
+  });
+})();
+</script>
+</body>
+</html>
